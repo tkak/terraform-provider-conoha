@@ -24,6 +24,7 @@ func resourceConohaContainer() *schema.Resource {
 }
 
 func resourceConohaContainerCreate(d *schema.ResourceData, meta interface{}) error {
+
 	client := meta.(*conoha.Client)
 
 	c := &conoha.Container{
@@ -34,15 +35,41 @@ func resourceConohaContainerCreate(d *schema.ResourceData, meta interface{}) err
 	if err != nil {
 		fmt.Printf("Error %s", err)
 	}
-	return nil
+
+	return resourceConohaContainerRead(d, meta)
 }
 
 func resourceConohaContainerRead(d *schema.ResourceData, meta interface{}) error {
+
+	client := meta.(*conoha.Client)
+
+	c := &conoha.Container{
+		Name: d.Get("name").(string),
+	}
+
+	err := client.ReadContainer(c)
+	if err != nil {
+		return fmt.Errorf("Error reading container: %s", err)
+	}
+
+	d.Set("name", c.Name)
+	d.SetId(c.Name)
 
 	return nil
 }
 
 func resourceConohaContainerDelete(d *schema.ResourceData, meta interface{}) error {
+
+	client := meta.(*conoha.Client)
+
+	c := &conoha.Container{
+		Name: d.Get("name").(string),
+	}
+
+	err := client.DeleteContainer(c)
+	if err != nil {
+		fmt.Printf("Error %s", err)
+	}
 
 	return nil
 }

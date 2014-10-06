@@ -6,5 +6,7 @@ import (
 )
 
 func main() {
-	plugin.Serve(conoha.Provider())
+	plugin.Serve(&plugin.ServeOpts{
+		ProviderFunc: conoha.Provider,
+	})
 }
