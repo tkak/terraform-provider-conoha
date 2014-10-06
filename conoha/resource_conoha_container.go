@@ -33,10 +33,13 @@ func resourceConohaContainerCreate(d *schema.ResourceData, meta interface{}) err
 
 	err := client.CreateContainer(c)
 	if err != nil {
-		fmt.Printf("Error %s", err)
+		return fmt.Errorf("Error creating container: %s", err)
 	}
 
-	return resourceConohaContainerRead(d, meta)
+	d.Set("name", c.Name)
+	d.SetId(c.Name)
+
+	return nil
 }
 
 func resourceConohaContainerRead(d *schema.ResourceData, meta interface{}) error {
@@ -68,8 +71,11 @@ func resourceConohaContainerDelete(d *schema.ResourceData, meta interface{}) err
 
 	err := client.DeleteContainer(c)
 	if err != nil {
-		fmt.Printf("Error %s", err)
+		return fmt.Errorf("Error deleting container: %s", err)
 	}
+
+	d.Set("name", c.Name)
+	d.SetId("")
 
 	return nil
 }
