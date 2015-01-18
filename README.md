@@ -36,5 +36,6 @@ $ terraform apply \
 
 ## References
 
+* [gophercloud](http://gophercloud.io/)
 * [API Reference](https://www.conoha.jp/guide/guide.php?g=52)
 * [Writing Custom Terraform Providers](https://www.hashicorp.com/blog/terraform-custom-providers.html)
