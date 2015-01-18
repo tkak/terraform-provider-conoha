@@ -1,0 +1,84 @@
+{
+	"ImportPath": "github.com/tkak/terraform-provider-conoha",
+	"GoVersion": "go1.4",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/hashicorp/hcl",
+			"Rev": "96d5b404339b804b7209cc8e2a3854e3388f88d2"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/config",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/depgraph",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/digraph",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/flatmap",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/helper/multierror",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/helper/schema",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/plugin",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/rpc",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/terraform/terraform",
+			"Comment": "v0.3.1-554-gef1f2d5",
+			"Rev": "ef1f2d5e716cef7c47c18c8359f3c10b49cf0e97"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/yamux",
+			"Rev": "9feabe6854fadca1abec9cd3bd2a613fe9a34000"
+		},
+		{
+			"ImportPath": "github.com/mitchellh/copystructure",
+			"Rev": "d8968bce41ab42f33aeb143afa95e331cb1ba886"
+		},
+		{
+			"ImportPath": "github.com/mitchellh/mapstructure",
+			"Rev": "740c764bc6149d3f1806231418adb9f52c11bcbf"
+		},
+		{
+			"ImportPath": "github.com/mitchellh/reflectwalk",
+			"Rev": "9989d7067f58812d814f5a837c5cbdd31799b694"
+		},
+		{
+			"ImportPath": "github.com/racker/perigee",
+			"Comment": "v0.0.0-18-g0c00cb0",
+			"Rev": "0c00cb0a026b71034ebc8205263c77dad3577db5"
+		},
+		{
+			"ImportPath": "github.com/rackspace/gophercloud",
+			"Comment": "v1.0.0-239-g4bc0d65",
+			"Rev": "4bc0d65f88a8b60df59778baa0b10e5a76dd68c9"
+		}
+	]
+}

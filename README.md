@@ -5,8 +5,36 @@ This project is a [terraform](http://www.terraform.io/) provider for [ConoHa](ht
 
 This current version only supports a container management function.
 
-References
-==========
+## Usage
+
+Terraform file
+
+```
+variable "conoha_username" {}
+variable "conoha_password" {}
+variable "conoha_tenant" {}
+
+provider "conoha" {
+    username = "${var.conoha_username}"
+    password = "${var.conoha_password}"
+    tenant_name = "${var.conoha_tenant}"
+}
+
+resource "conoha_container" "example" {
+    name = "foo"
+}
+```
+
+Run terraform.
+
+```
+$ terraform apply \
+-var "conoha_username=${CONOHA_USERNAME}" \
+-var "conoha_password=${CONOHA_PASSWORD}" \
+-var "conoha_tenant=${CONOHA_TENANT}"
+```
+
+## References
 
 * [API Reference](https://www.conoha.jp/guide/guide.php?g=52)
 * [Writing Custom Terraform Providers](https://www.hashicorp.com/blog/terraform-custom-providers.html)
