@@ -1,30 +1,33 @@
 package conoha
 
 import (
-	"log"
-
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	"github.com/mitchellh/mapstructure"
 )
 
 // Provider returns a terraform.ResourceProvider.
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"tenant": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+			"tenant_name": &schema.Schema{
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("CONOHA_TENANT", nil),
+				Description: "A ConoHa tenant name.",
 			},
 
-			"user": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+			"username": &schema.Schema{
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("CONOHA_USERNAME", nil),
+				Description: "A ConoHa user name.",
 			},
 
 			"password": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				DefaultFunc: schema.EnvDefaultFunc("CONOHA_PASSWORD", nil),
+				Description: "A ConoHa user password.",
 			},
 		},
 
@@ -37,13 +40,11 @@ func Provider() terraform.ResourceProvider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	var config Config
-	configRaw := d.Get("").(map[string]interface{})
-	if err := mapstructure.Decode(configRaw, &config); err != nil {
-		return nil, err
+	config := Config{
+		TenantName: d.Get("tenant_name").(string),
+		Username:   d.Get("username").(string),
+		Password:   d.Get("password").(string),
 	}
 
-	log.Println("[INFO] Initializing ConoHa client")
-
-	return config.Client()
+	return config.NewClient()
 }

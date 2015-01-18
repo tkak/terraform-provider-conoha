@@ -1,11 +1,11 @@
-variable "conoha_user" {}
+variable "conoha_username" {}
 variable "conoha_password" {}
 variable "conoha_tenant" {}
 
 provider "conoha" {
-    user = "${var.conoha_user}"
+    username = "${var.conoha_username}"
     password = "${var.conoha_password}"
-    tenant = "${var.conoha_tenant}"
+    tenant_name = "${var.conoha_tenant}"
 }
 
 resource "conoha_container" "example" {

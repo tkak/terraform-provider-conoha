@@ -2,9 +2,13 @@ package conoha
 
 import (
 	"fmt"
+	"log"
+
+	"github.com/rackspace/gophercloud"
+	"github.com/rackspace/gophercloud/openstack"
+	"github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers"
 
 	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/tkak/conoha"
 )
 
 func resourceConohaContainer() *schema.Resource {
@@ -24,58 +28,68 @@ func resourceConohaContainer() *schema.Resource {
 }
 
 func resourceConohaContainerCreate(d *schema.ResourceData, meta interface{}) error {
+	provider := meta.(*gophercloud.ProviderClient)
 
-	client := meta.(*conoha.Client)
-
-	c := &conoha.Container{
-		Name: d.Get("name").(string),
-	}
-
-	err := client.CreateContainer(c)
+	client, err := openstack.NewObjectStorageV1(provider, gophercloud.EndpointOpts{
+		Region: "RegionOne",
+	})
 	if err != nil {
-		return fmt.Errorf("Error creating container: %s", err)
+		return fmt.Errorf("error %s", err)
 	}
 
-	d.Set("name", c.Name)
-	d.SetId(c.Name)
+	// TODO: Use metadata
+	opts := containers.CreateOpts{}
 
-	return nil
+	name := d.Get("name").(string)
+	_, err = containers.Create(client, name, opts).ExtractHeader()
+	if err != nil {
+		return fmt.Errorf("error %s", err)
+	}
+
+	d.Set("name", name)
+	d.SetId(name)
+	log.Printf("[INFO] ConoHa container ID: %s", d.Id())
+
+	return resourceConohaContainerRead(d, meta)
 }
 
 func resourceConohaContainerRead(d *schema.ResourceData, meta interface{}) error {
+	provider := meta.(*gophercloud.ProviderClient)
 
-	client := meta.(*conoha.Client)
-
-	c := &conoha.Container{
-		Name: d.Get("name").(string),
-	}
-
-	err := client.ReadContainer(c)
+	client, err := openstack.NewObjectStorageV1(provider, gophercloud.EndpointOpts{
+		Region: "RegionOne",
+	})
 	if err != nil {
-		return fmt.Errorf("Error reading container: %s", err)
+		return fmt.Errorf("error %s", err)
 	}
 
-	d.Set("name", c.Name)
-	d.SetId(c.Name)
+	name := d.Get("name").(string)
+	_, err = containers.Get(client, name).ExtractHeader()
+	if err != nil {
+		return fmt.Errorf("error %s", err)
+	}
+
+	d.Set("name", name)
+	d.SetId(name)
 
 	return nil
 }
 
 func resourceConohaContainerDelete(d *schema.ResourceData, meta interface{}) error {
+	provider := meta.(*gophercloud.ProviderClient)
 
-	client := meta.(*conoha.Client)
-
-	c := &conoha.Container{
-		Name: d.Get("name").(string),
-	}
-
-	err := client.DeleteContainer(c)
+	client, err := openstack.NewObjectStorageV1(provider, gophercloud.EndpointOpts{
+		Region: "RegionOne",
+	})
 	if err != nil {
-		return fmt.Errorf("Error deleting container: %s", err)
+		return fmt.Errorf("error %s", err)
 	}
 
-	d.Set("name", c.Name)
-	d.SetId("")
+	name := d.Get("name").(string)
+	_, err = containers.Delete(client, name).ExtractHeader()
+	if err != nil {
+		return fmt.Errorf("error %s", err)
+	}
 
 	return nil
 }

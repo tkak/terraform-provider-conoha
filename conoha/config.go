@@ -1,43 +1,29 @@
 package conoha
 
 import (
-	"fmt"
-	"log"
-	"os"
-
-	"github.com/tkak/conoha"
+	"github.com/rackspace/gophercloud"
+	"github.com/rackspace/gophercloud/openstack"
 )
 
 type Config struct {
-	Tenant   string `mapstructure:"tenant"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
-	Token    string `mapstructure:"token"`
-	Endpoint string `mapstructure:"endpoint"`
+	Username   string
+	Password   string
+	TenantName string
+	Token      string
+	Endpoint   string
 }
 
-func (c *Config) Client() (*conoha.Client, error) {
-
-	if v := os.Getenv("CONOHA_TENANT"); v != "" {
-		c.Tenant = v
+func (c *Config) NewClient() (*gophercloud.ProviderClient, error) {
+	opts := gophercloud.AuthOptions{
+		IdentityEndpoint: "https://ident-r1nd1001.cnode.jp/v2.0/",
+		Username:         c.Username,
+		Password:         c.Password,
+		TenantName:       c.TenantName,
 	}
-
-	if v := os.Getenv("CONOHA_USER"); v != "" {
-		c.User = v
-	}
-
-	if v := os.Getenv("CONOHA_PASSWORD"); v != "" {
-		c.Password = v
-	}
-
-	client, err := conoha.NewClient(c.Tenant, c.User, c.Password)
-
+	provider, err := openstack.AuthenticatedClient(opts)
 	if err != nil {
-		fmt.Println("")
+		return nil, err
 	}
 
-	log.Printf("[INFO] ConoHaClient configured for user %s", c.User)
-	log.Printf("[INFO] ConoHa Endpoint configured %s", c.Endpoint)
-
-	return client, nil
+	return provider, nil
 }
