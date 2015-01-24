@@ -1,0 +1,28 @@
+language: go
+
+go:
+  - 1.4
+
+env:
+  global:
+  - TF_ACC=1
+  - secure: "COJa73WOcQMANKrM0gOHpyp0Ypzel/faFYSDnMGcXKdkl1iieB7sWimRlgvfj8Ihdt8Zx9znm3VgSYMbsOSNGyKAikEYt7aCvZpxlOnw4fty3+Ru+BnHAFIlJ0GqN7w38Tvg1YryPxYAQRrxElX8gzsYOFDpKMj/eOmqlDh6s1s="
+  - secure: "uljYwXILJ5vX+Ml9RUrkh5nM5sJ5nk2ixayxZ74gK7eemEF9muwtQbx+rD9XIxzjrC3bbb0BHqjypszxvUbL1skXG88Y+7VPblWeuibPsgzz32YuOEYigGVnyLEU/8U98Nn4FYnWSflBoleSxsKBJQ576GGVq7+7/vaF9X0zMoA="
+  - secure: "wvNB+jHUqeOoy+TL5LjJRX57hNWsF+DwrjjLZbJGp0YqdHfZoepJpZqiRy5fdjRR6Kx6jscASjcaDIr3amGKkLQXoyqx7szOrZ51iILyoBKmMG1zUE8Guiz+7B/qujrhmdZO1CkX71HFvTMm5uO4OXoSyX+wxxou+2CzD7BUyec="
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install mercurial
+  - go get -u github.com/mitchellh/gox
+  - mkdir -p $HOME/gopath/src/github.com/hashicorp
+  - cd $HOME/gopath/src/github.com/hashicorp && git clone https://github.com/hashicorp/terraform.git
+  - cd $HOME/gopath/src/github.com/hashicorp/terraform && make updatedeps && make dev
+
+install:
+  - go get github.com/motain/gocheck
+  - go get github.com/rackspace/gophercloud
+  - go get github.com/tkak/terraform-provider-conoha
+
+script:
+  - cd $HOME/gopath/src/github.com/tkak/terraform-provider-conoha/conoha
+  - go test -v
