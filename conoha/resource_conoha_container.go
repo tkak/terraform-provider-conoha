@@ -37,10 +37,13 @@ func resourceConohaContainerCreate(d *schema.ResourceData, meta interface{}) err
 		return fmt.Errorf("error %s", err)
 	}
 
-	// TODO: Use metadata
-	opts := containers.CreateOpts{}
-
 	name := d.Get("name").(string)
+	// TODO: Use metadata
+	opts := containers.CreateOpts{
+		Metadata: map[string]string{
+			"name": name,
+		},
+	}
 	_, err = containers.Create(client, name, opts).ExtractHeader()
 	if err != nil {
 		return fmt.Errorf("error %s", err)
