@@ -32,6 +32,7 @@ func TestAccConohaContainer_Basic(t *testing.T) {
 	})
 }
 
+/*
 func TestAccConohaContainer_Updated(t *testing.T) {
 	var container containers.Container
 
@@ -43,7 +44,7 @@ func TestAccConohaContainer_Updated(t *testing.T) {
 			resource.TestStep{
 				Config: fmt.Sprintf(testAccCheckConohaContainerConfig_basic),
 				Check: resource.ComposeTestCheckFunc(
-					// testAccCheckConohaContainerExists("conoha_container.foobar", &container),
+					testAccCheckConohaContainerExists("conoha_container.foobar", &container),
 					testAccCheckConohaContainerAttributes(&container),
 					resource.TestCheckResourceAttr(
 						"conoha_container.foobar", "name", "foo"),
@@ -52,7 +53,7 @@ func TestAccConohaContainer_Updated(t *testing.T) {
 			resource.TestStep{
 				Config: fmt.Sprintf(testAccCheckConohaContainerConfig_new_value),
 				Check: resource.ComposeTestCheckFunc(
-					// testAccCheckConohaContainerExists("conoha_container.foobar", &container),
+					testAccCheckConohaContainerExists("conoha_container.foobar", &container),
 					testAccCheckConohaContainerAttributesUpdated(&container),
 					resource.TestCheckResourceAttr(
 						"conoha_container.foobar", "name", "foo"),
@@ -61,20 +62,20 @@ func TestAccConohaContainer_Updated(t *testing.T) {
 		},
 	})
 }
+*/
 
 func testAccCheckConohaContainerDestroy(s *terraform.State) error {
 	provider := testAccProvider.Meta().(*gophercloud.ProviderClient)
+	client, err := openstack.NewObjectStorageV1(provider, gophercloud.EndpointOpts{
+		Region: "RegionOne",
+	})
+	if err != nil {
+		return fmt.Errorf("error %s", err)
+	}
 
 	for _, rs := range s.RootModule().Resources {
 		if rs.Type != "conoha_container" {
 			continue
-		}
-
-		client, err := openstack.NewObjectStorageV1(provider, gophercloud.EndpointOpts{
-			Region: "RegionOne",
-		})
-		if err != nil {
-			return fmt.Errorf("error %s", err)
 		}
 
 		_, err = containers.Get(client, rs.Primary.Attributes["name"]).ExtractHeader()
@@ -121,17 +122,23 @@ func testAccCheckConohaContainerExists(n string, container *containers.Container
 		}
 
 		provider := testAccProvider.Meta().(*gophercloud.ProviderClient)
-
-		_, err = containers.Get(client, rs.Primary.Attributes["name"]).ExtractHeader()
+		client, err := openstack.NewObjectStorageV1(provider, gophercloud.EndpointOpts{
+			Region: "RegionOne",
+		})
 		if err != nil {
-			return err
+			return fmt.Errorf("error %s", err)
 		}
 
-		if foundContainer.StringId() != rs.Primary.ID {
+		_, err = containers.Get(client, rs.Primary.Attributes["name"]).ExtractMetadata()
+		if err != nil {
 			return fmt.Errorf("container not found")
 		}
 
-		*container = *foundContainer
+		cm := containers.Container{
+			Name: rs.Primary.Attributes["name"],
+		}
+
+		*container = cm
 
 		return nil
 	}
