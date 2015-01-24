@@ -5,8 +5,7 @@ terraform-provider-conoha
 
 
 This project is a [terraform](http://www.terraform.io/) provider for [ConoHa](https://www.conoha.jp/en) Object Storage.
-
-This current version only supports a container management function.
+This is work in progress. This current version only supports a container management feature.
 
 ## Usage
 
