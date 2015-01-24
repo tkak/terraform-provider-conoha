@@ -1,6 +1,9 @@
 terraform-provider-conoha
 =========================
 
+[![Build Status](https://travis-ci.org/tkak/terraform-provider-conoha.svg?branch=master)](https://travis-ci.org/tkak/terraform-provider-conoha)
+
+
 This project is a [terraform](http://www.terraform.io/) provider for [ConoHa](https://www.conoha.jp/en) Object Storage.
 
 This current version only supports a container management function.
